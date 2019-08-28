@@ -106,7 +106,7 @@ public class Player {
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
                 //g.setColor(new Color(128,0,128)); //Changes color of snake to green
-                g.setColor(RandomColor.randColor);
+                g.setColor(RandomColor.randColor); //Changes color of snake to a random one
 
                 if(playeLocation[i][j]||handler.getWorld().appleLocation[i][j]){
                     g.fillRect((i*handler.getWorld().GridPixelsize),
