@@ -1,6 +1,7 @@
 package Game.Entities.Dynamic;
 
 import Main.Handler;
+import MyPackage.RandomColor;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -104,7 +105,8 @@ public class Player {
         Random r = new Random();
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-                g.setColor(Color.WHITE);
+                //g.setColor(new Color(128,0,128)); //Changes color of snake to green
+                g.setColor(RandomColor.randColor);
 
                 if(playeLocation[i][j]||handler.getWorld().appleLocation[i][j]){
                     g.fillRect((i*handler.getWorld().GridPixelsize),
