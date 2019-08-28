@@ -118,7 +118,7 @@ public class GameSetUp implements Runnable {
 
     public void run(){
 
-        //initiallizes everything in order to run without breaking
+        //initializes everything in order to run without breaking
         init();
 
         int fps = 60;

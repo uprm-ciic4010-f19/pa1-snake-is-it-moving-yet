@@ -10,6 +10,7 @@ import java.util.Random;
 /**
  * Created by AlexVR on 7/2/2018.
  */
+//Comitting and Pushing through Eclipse
 public class Player {
 
     public int lenght;
@@ -235,6 +236,7 @@ public class Player {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
                 handler.getWorld().playerLocation[i][j]=false;
+                
 
             }
         }
