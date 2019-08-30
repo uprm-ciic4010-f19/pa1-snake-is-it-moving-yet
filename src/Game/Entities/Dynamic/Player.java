@@ -2,7 +2,7 @@ package Game.Entities.Dynamic;
 
 import Main.Handler;
 import MyPackage.RandomColor;
-import Game.GameStates.*;
+
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -50,6 +50,9 @@ public class Player {
             direction="Left";
         }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT)){
             direction="Right";
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)) {
+        	//Whenever "N" is pressed, it'll "eat" and add a piece of tail
+        	Eat();
         }
 
     }
