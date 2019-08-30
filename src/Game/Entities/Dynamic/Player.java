@@ -35,10 +35,10 @@ public class Player {
         lenght= 1;
 
     }
-
+    int speed = 0;
     public void tick(){
         moveCounter++;
-        if(moveCounter>=5) {
+        if(moveCounter>=5 + speed) {
             checkCollisionAndMove();
             moveCounter=0;
         }
@@ -53,6 +53,12 @@ public class Player {
         }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)) {
         	//Whenever "N" is pressed, it will add a piece of tail
         	DebugEat();
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_M)) {
+        	//Decreases snake's speed
+        	speed++;
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_P)) {
+        	//Increases snake's speed
+        	speed--;
         }
 
     }

@@ -169,7 +169,9 @@ public class GameSetUp implements Runnable {
         	//add Pause state here when "ESC" is pressed
         	State.setState(pauseState);
         }
+        
     }
+    
 
     private void render(){
         bs = display.getCanvas().getBufferStrategy();
