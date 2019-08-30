@@ -166,7 +166,7 @@ public class GameSetUp implements Runnable {
             State.getState().tick();
         
         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ESCAPE)) {
-        	//add Pause state here when "ESP" is pressed
+        	//add Pause state here when "ESC" is pressed
         	State.setState(pauseState);
         }
     }
