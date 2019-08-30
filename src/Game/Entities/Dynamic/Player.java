@@ -2,6 +2,7 @@ package Game.Entities.Dynamic;
 
 import Main.Handler;
 import MyPackage.RandomColor;
+import Game.GameStates.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

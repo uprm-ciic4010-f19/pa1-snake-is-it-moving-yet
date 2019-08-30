@@ -11,6 +11,7 @@ import Resources.Images;
 
 import javax.sound.sampled.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -83,6 +84,8 @@ public class GameSetUp implements Runnable {
         pauseState = new PauseState(handler);
 
         State.setState(menuState);
+        
+        
 
         try {
 
@@ -161,6 +164,11 @@ public class GameSetUp implements Runnable {
         //game states are the menus
         if(State.getState() != null)
             State.getState().tick();
+        
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ESCAPE)) {
+        	//add Pause state here when "ESP" is pressed
+        	State.setState(pauseState);
+        }
     }
 
     private void render(){
