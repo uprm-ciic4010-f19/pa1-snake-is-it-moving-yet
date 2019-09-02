@@ -24,7 +24,7 @@ import java.io.InputStream;
 
 public class GameSetUp implements Runnable {
     private DisplayScreen display;
-    private int width, height;
+    public int width, height;
     public String title;
 
     private boolean running = false;
@@ -107,7 +107,7 @@ public class GameSetUp implements Runnable {
     }
 
     public void reStart(){
-        gameState = new GameState(handler);
+    	gameState = new GameState(handler);
     }
 
     public synchronized void start(){

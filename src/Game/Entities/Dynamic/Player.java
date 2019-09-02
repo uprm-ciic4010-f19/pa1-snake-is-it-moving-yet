@@ -2,15 +2,20 @@ package Game.Entities.Dynamic;
 
 import Main.Handler;
 import MyPackage.RandomColor;
+import Game.GameStates.GameState;
+import Game.GameStates.State;
+import Main.GameSetUp;
+
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Random;
+
 
 /**
  * Created by AlexVR on 7/2/2018.
  */
 //Comitting and Pushing through Eclipse
+//lol020202
 public class Player {
 
     public int lenght;
@@ -70,28 +75,28 @@ public class Player {
         switch (direction){
             case "Left":
                 if(xCoord==0){
-                    kill();
+                    xCoord = handler.getWorld().GridWidthHeightPixelCount-1;
                 }else{
                     xCoord--;
                 }
                 break;
             case "Right":
                 if(xCoord==handler.getWorld().GridWidthHeightPixelCount-1){
-                    kill();
+                   xCoord = 0;
                 }else{
                     xCoord++;
                 }
                 break;
             case "Up":
                 if(yCoord==0){
-                    kill();
+                    yCoord = handler.getWorld().GridWidthHeightPixelCount-1;
                 }else{
                     yCoord--;
                 }
                 break;
             case "Down":
                 if(yCoord==handler.getWorld().GridWidthHeightPixelCount-1){
-                    kill();
+                    yCoord = 0;
                 }else{
                     yCoord++;
                 }
@@ -356,10 +361,16 @@ public class Player {
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
-                handler.getWorld().playerLocation[i][j]=false;
-                	
+                handler.getWorld().playerLocation[i][j]=true;
+                reStart();	
             }
         }
+    }
+   
+    //reStart function within Player.java
+    public State gameState;
+    public void reStart() {
+    	gameState = new GameState(handler);
     }
 
     public boolean isJustAte() {
