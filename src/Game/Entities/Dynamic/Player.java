@@ -145,7 +145,7 @@ public class Player {
             }
             System.out.println("Steps: " + steps); //prints out steps for debug purposes
             System.out.println("Length: " + lenght); //prints out length for debug purposes
-            System.out.println("Speed: " + speed); //prints out speed for debug purposes
+            System.out.println("Speed: " + (speed * -1)); //prints out speed for debug purposes
             steps = 0;
         }
 
@@ -445,7 +445,7 @@ public class Player {
                 break;
         }
         handler.getWorld().body.remove(tail);
-        handler.getWorld().playerLocation[tail.x][tail.y] = false;
+        handler.getWorld().playerLocation[tail.x][tail.y] = true;
         speed = speed + 0.25; //Decreases speed when apple is eaten by 0.05
         setCurrScore(getCurrScore() - Math.sqrt(2 * getCurrScore() + 1)); //Increases current score by equation
         System.out.println("Score: " + getCurrScore()); //Prints score to console while we get it to render on screen
