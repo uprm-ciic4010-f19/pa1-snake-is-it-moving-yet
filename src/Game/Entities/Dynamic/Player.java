@@ -5,7 +5,8 @@ import MyPackage.RandomColor;
 import Game.GameStates.GameState;
 import Game.GameStates.State;
 import Main.GameSetUp;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -40,31 +41,52 @@ public class Player {
 
     }
     
+    int sizeOfBody;
     double speed = 0.0;
+    int arrayMLength;
     public void tick(){
         moveCounter++;
         if(moveCounter>=5 + speed) {
             checkCollisionAndMove();
+            //infintySnake();
+            //checkDeath();
             moveCounter=0;
         }
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP)){
-            direction="Up";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN)){
-            direction="Down";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT)){
-            direction="Left";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT)){
-            direction="Right";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_P)){
+        if(direction != "Down") {
+        	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP)){
+        		direction="Up";
+        	}   
+        }
+        if(direction != "Up") {
+        	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN)){
+                direction="Down";
+            }
+        }
+        if(direction != "Right") {
+        	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT)){
+                direction="Left";
+            }
+        }
+        if(direction != "Left") {
+        	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT)){
+                direction="Right";
+            }
+        }
+        
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_P)){
             //Increases snake's speed
         	speed--;
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_M)){
+        }
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_M)){
             //Decreases snake's speed
         	speed++;
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
+        }
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
             //Adds a piece of tail
         	debugEat();
         }
+        sizeOfBody = lenght;
+        arrayMLength = sizeOfXY - sizeOfBody;
 
     }
 
@@ -75,28 +97,28 @@ public class Player {
         switch (direction){
             case "Left":
                 if(xCoord==0){
-                    xCoord = handler.getWorld().GridWidthHeightPixelCount-1;
+                    xCoord = handler.getWorld().GridWidthHeightPixelCount-1; //TP to right
                 }else{
                     xCoord--;
                 }
                 break;
             case "Right":
                 if(xCoord==handler.getWorld().GridWidthHeightPixelCount-1){
-                   xCoord = 0;
+                   xCoord = 0; //TP to left
                 }else{
                     xCoord++;
                 }
                 break;
             case "Up":
                 if(yCoord==0){
-                    yCoord = handler.getWorld().GridWidthHeightPixelCount-1;
+                    yCoord = handler.getWorld().GridWidthHeightPixelCount-1; //TP to bottom
                 }else{
                     yCoord--;
                 }
                 break;
             case "Down":
                 if(yCoord==handler.getWorld().GridWidthHeightPixelCount-1){
-                    yCoord = 0;
+                    yCoord = 0; //TP to top
                 }else{
                     yCoord++;
                 }
@@ -116,7 +138,76 @@ public class Player {
         }
 
     }
+    
+    //Records coordinates in two different arrays, x and y
+    public ArrayList<Integer> arrayCheckXY;
+    public String arrayCheckOnX[] = new String[] {};
+    public String arrayCheckOnY[] = new String[] {};
+    public int positionOfArray = 0;
+    int sizeOfX = 0;
+    int sizeOfY = 0;
+    int sizeOfXY = 0;
+    public void appendArrayCheck(String x, String y, int z, int f) {
+    	 x = Integer.toString(handler.getWorld().body.getFirst().x);
+    	 y = Integer.toString(handler.getWorld().body.getFirst().y);
+    	 z = handler.getWorld().body.getFirst().x;
+    	 f = handler.getWorld().body.getFirst().y;
+    	 
+    	 arrayCheckXY.add(z, f);
+    	 arrayCheckOnX[positionOfArray] = x;
+    	 arrayCheckOnY[positionOfArray] = y;
+    	 positionOfArray++;
+    	 
+    	 sizeOfX = arrayCheckOnX.length;
+    	 sizeOfY = arrayCheckOnY.length;
+    	 sizeOfXY = arrayCheckXY.size();
+    	 
+    	 //infinitySnake();
+    	 //checkDeath();
+    	 
+    }
+    
+   /* public void checkDeath() {
+    	for(int i = Math.subtractExact(sizeOfXY, sizeOfBody), i < sizeOfXY, i++) {
+    		
+    	}
+    }*/
+    
+    
+    
+    
+    //Compares with both x and y arrays to see if player hit its body
+   /* public void checkDeath() {
+    	int i = sizeOfX - sizeOfBody; //for x coords
+    	int j = i; //for y coords
+    	for (i, i < sizeOfX, i++) {
+    		if(arrayCheckOnX[i] == handler.getWorld().body.getLast().x) {
+    			
+    		}
+    	}
+    }*/
+    
+    //Checks array coords with current ones to see if player hit the body
+    /*public void infinitySnake(){
+        handler.getWorld().playerLocation[xCoord][yCoord]=false;
+        int x = xCoord;
+        int y = yCoord;
+        switch (direction){
+            case "Left":
+                if(xCoord==0){
+                    kill();
+                }else{
+                    
+                }
+                break;
+          
+        }
+        handler.getWorld().playerLocation[xCoord][yCoord]=true;
+        
+    }*/
 
+    
+    
     public void render(Graphics g,Boolean[][] playeLocation){
         
         
@@ -138,7 +229,7 @@ public class Player {
 
     }
 
-    double currScore = 0.0;
+    private static double currScore = 0.0;
     public void Eat(){
         lenght++;
         Tail tail= null;
@@ -246,8 +337,8 @@ public class Player {
         handler.getWorld().body.addLast(tail);
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
         speed = speed - 0.05; //Increases speed when apple is eaten by 0.05
-        currScore = currScore + Math.sqrt(2 * currScore + 1); //Increases current score by equation
-        System.out.println("Score: " + currScore); //Prints score to console while we get it to render on screen
+        setCurrScore(getCurrScore() + Math.sqrt(2 * getCurrScore() + 1)); //Increases current score by equation
+        System.out.println("Score: " + getCurrScore()); //Prints score to console while we get it to render on screen
     }
 
     public void debugEat(){
@@ -380,4 +471,12 @@ public class Player {
     public void setJustAte(boolean justAte) {
         this.justAte = justAte;
     }
+
+	public static double getCurrScore() {
+		return currScore;
+	}
+
+	public void setCurrScore(double currScore) {
+		Player.currScore = currScore;
+	}
 }

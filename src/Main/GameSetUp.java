@@ -8,6 +8,7 @@ import Game.GameStates.State;
 import Input.KeyManager;
 import Input.MouseManager;
 import Resources.Images;
+import Game.Entities.Dynamic.*;
 
 import javax.sound.sampled.*;
 import java.awt.*;
@@ -188,6 +189,7 @@ public class GameSetUp implements Runnable {
         g.drawImage(loading ,0,0,width,height,null);
         if(State.getState() != null)
             State.getState().render(g);
+        g.drawString("Score is: " + Math.floor(Player.getCurrScore()), 10, 10); // draws score to screen
 
 
         //End Drawing!
