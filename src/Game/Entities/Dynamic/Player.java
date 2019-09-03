@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.lang.reflect.Array;
 
 
 /**
@@ -41,15 +42,12 @@ public class Player {
 
     }
     
-    int sizeOfBody;
     double speed = 0.0;
-    int arrayMLength;
     public void tick(){
         moveCounter++;
         if(moveCounter>=5 + speed) {
             checkCollisionAndMove();
-            //infintySnake();
-            //checkDeath();
+            //appendArrayCheck();
             moveCounter=0;
         }
         if(direction != "Down") {
@@ -85,8 +83,6 @@ public class Player {
             //Adds a piece of tail
         	debugEat();
         }
-        sizeOfBody = lenght;
-        arrayMLength = sizeOfXY - sizeOfBody;
 
     }
 
@@ -140,72 +136,52 @@ public class Player {
     }
     
     //Records coordinates in two different arrays, x and y
-    public ArrayList<Integer> arrayCheckXY;
+    /*public ArrayList<Integer> arrayCheckXY;
+    public ArrayList<Integer> currentXY;
     public String arrayCheckOnX[] = new String[] {};
     public String arrayCheckOnY[] = new String[] {};
     public int positionOfArray = 0;
     int sizeOfX = 0;
     int sizeOfY = 0;
     int sizeOfXY = 0;
-    public void appendArrayCheck(String x, String y, int z, int f) {
-    	 x = Integer.toString(handler.getWorld().body.getFirst().x);
-    	 y = Integer.toString(handler.getWorld().body.getFirst().y);
+    int z, f;
+    public void appendArrayCheck() {
+    	 String x = Integer.toString(handler.getWorld().body.getFirst().x);
+    	 String y = Integer.toString(handler.getWorld().body.getFirst().y);
     	 z = handler.getWorld().body.getFirst().x;
     	 f = handler.getWorld().body.getFirst().y;
     	 
-    	 arrayCheckXY.add(z, f);
     	 arrayCheckOnX[positionOfArray] = x;
     	 arrayCheckOnY[positionOfArray] = y;
     	 positionOfArray++;
     	 
     	 sizeOfX = arrayCheckOnX.length;
     	 sizeOfY = arrayCheckOnY.length;
-    	 sizeOfXY = arrayCheckXY.size();
     	 
-    	 //infinitySnake();
-    	 //checkDeath();
+    	 checkDeath();
     	 
     }
     
-   /* public void checkDeath() {
-    	for(int i = Math.subtractExact(sizeOfXY, sizeOfBody), i < sizeOfXY, i++) {
-    		
-    	}
-    }*/
-    
-    
-    
-    
-    //Compares with both x and y arrays to see if player hit its body
-   /* public void checkDeath() {
-    	int i = sizeOfX - sizeOfBody; //for x coords
-    	int j = i; //for y coords
-    	for (i, i < sizeOfX, i++) {
-    		if(arrayCheckOnX[i] == handler.getWorld().body.getLast().x) {
-    			
+    public void checkDeath() {
+    	String a = Integer.toString(handler.getWorld().body.getFirst().x);
+    	String b = Integer.toString(handler.getWorld().body.getFirst().y);
+    	currentXY.add(z, f);
+    	//int x = Array.getInt(currentXY, 0);
+    	//int y = Array.getInt(currentXY, 1);
+    	String xCompare, yCompare;
+    	for(int i = sizeOfX - lenght; i < sizeOfX - 1; i++) {
+    		xCompare = arrayCheckOnX[i];
+    		if(a == xCompare) {	
+    			for(int j = sizeOfY - lenght; j < sizeOfY - 1; j++) {
+    				yCompare = arrayCheckOnY[j];
+    				if(b == yCompare) {
+    					kill();
+    				}
+    			}
     		}
     	}
     }*/
     
-    //Checks array coords with current ones to see if player hit the body
-    /*public void infinitySnake(){
-        handler.getWorld().playerLocation[xCoord][yCoord]=false;
-        int x = xCoord;
-        int y = yCoord;
-        switch (direction){
-            case "Left":
-                if(xCoord==0){
-                    kill();
-                }else{
-                    
-                }
-                break;
-          
-        }
-        handler.getWorld().playerLocation[xCoord][yCoord]=true;
-        
-    }*/
-
     
     
     public void render(Graphics g,Boolean[][] playeLocation){

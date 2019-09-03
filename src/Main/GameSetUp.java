@@ -189,7 +189,7 @@ public class GameSetUp implements Runnable {
         g.drawImage(loading ,0,0,width,height,null);
         if(State.getState() != null)
             State.getState().render(g);
-        g.drawString("Score is: " + Math.floor(Player.getCurrScore()), 10, 10); // draws score to screen
+        g.drawString("Score is: " + Math.floor(Player.getCurrScore()), 10, 10); // draws score to screen (floor of it)
 
 
         //End Drawing!
