@@ -93,6 +93,17 @@ public class Player {
         	currScore = 0;
         	kill();
         }
+        
+        if(steps >= 600) {
+        	kill();
+        	steps = 0;
+        	lenght = 1;
+        	currScore = 0;
+        }
+        
+        if(isRottenApple) {
+        	
+        }
 
     }
     public static int steps = 0; //records amount of steps before eating an apple (to implement rotten apple)
@@ -211,8 +222,15 @@ public class Player {
         
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-                //g.setColor(new Color(128,0,128)); //Changes color of snake to green
-                g.setColor(RandomColor.randColor); //Changes color of snake to a random one
+                if(steps <240) {
+                	g.setColor(new Color(0, 204, 0));
+                }if(steps >= 240 && steps < 480) {
+                	g.setColor(new Color(255, 102, 0));
+                }if(steps >= 480) {
+                	g.setColor(new Color(255, 0, 0));
+                }
+            	//g.setColor(new Color(128,0,128)); //Changes color of snake to green
+                //g.setColor(RandomColor.randColor); //Changes color of snake to a random one
 
                 if(playeLocation[i][j]||handler.getWorld().appleLocation[i][j]){
                     g.fillRect((i*handler.getWorld().GridPixelsize),
@@ -446,7 +464,7 @@ public class Player {
         }
         handler.getWorld().body.remove(tail);
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
-        speed = speed + 0.25; //Decreases speed when apple is eaten by 0.05
+        speed = speed + 0.25; //Decreases speed when apple is eaten by 0.25
         setCurrScore(getCurrScore() - Math.sqrt(2 * getCurrScore() + 1)); //Increases current score by equation
         System.out.println("Score: " + getCurrScore()); //Prints score to console while we get it to render on screen
     }
@@ -577,7 +595,7 @@ public class Player {
     //Implements rotten apple
     public boolean rottenApple() {
     	
-    	//Apple.setColor(Color.RED);
+    	//apple.setColor(Color.RED);
     	
     	if(steps >= 240) {
     		return true;
