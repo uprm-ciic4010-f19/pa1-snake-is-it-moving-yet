@@ -2,6 +2,7 @@ package Game.Entities.Dynamic;
 
 import Main.Handler;
 import MyPackage.RandomColor;
+import Game.Entities.Static.Apple;
 import Game.GameStates.GameState;
 import Game.GameStates.State;
 import Main.GameSetUp;
@@ -42,12 +43,14 @@ public class Player {
 
     }
     
+    boolean isRottenApple;
     double speed = 0.0;
     public void tick(){
         moveCounter++;
         if(moveCounter>=5 + speed) {
             checkCollisionAndMove();
             //appendArrayCheck();
+            isRottenApple = rottenApple();
             moveCounter=0;
         }
         if(direction != "Down") {
@@ -83,9 +86,16 @@ public class Player {
             //Adds a piece of tail
         	debugEat();
         }
+        
+        //reStarts game if snake become headless or score goes into negative
+        if(lenght == 0 || currScore < 0) {
+        	lenght = 1;
+        	currScore = 0;
+        	kill();
+        }
 
     }
-
+    public static int steps = 0; //records amount of steps before eating an apple (to implement rotten apple)
     public void checkCollisionAndMove(){
         handler.getWorld().playerLocation[xCoord][yCoord]=false;
         int x = xCoord;
@@ -96,6 +106,7 @@ public class Player {
                     xCoord = handler.getWorld().GridWidthHeightPixelCount-1; //TP to right
                 }else{
                     xCoord--;
+                    steps++;
                 }
                 break;
             case "Right":
@@ -103,6 +114,7 @@ public class Player {
                    xCoord = 0; //TP to left
                 }else{
                     xCoord++;
+                    steps++;
                 }
                 break;
             case "Up":
@@ -110,6 +122,7 @@ public class Player {
                     yCoord = handler.getWorld().GridWidthHeightPixelCount-1; //TP to bottom
                 }else{
                     yCoord--;
+                    steps++;
                 }
                 break;
             case "Down":
@@ -117,6 +130,7 @@ public class Player {
                     yCoord = 0; //TP to top
                 }else{
                     yCoord++;
+                    steps++;
                 }
                 break;
         }
@@ -124,7 +138,15 @@ public class Player {
 
 
         if(handler.getWorld().appleLocation[xCoord][yCoord]){
-            Eat();
+            if(isRottenApple) {
+            	badEat();
+            }else {
+            	Eat();
+            }
+            System.out.println("Steps: " + steps); //prints out steps for debug purposes
+            System.out.println("Length: " + lenght); //prints out length for debug purposes
+            System.out.println("Speed: " + speed); //prints out speed for debug purposes
+            steps = 0;
         }
 
         if(!handler.getWorld().body.isEmpty()) {
@@ -312,8 +334,120 @@ public class Player {
         }
         handler.getWorld().body.addLast(tail);
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
-        speed = speed - 0.05; //Increases speed when apple is eaten by 0.05
+        speed = speed - 0.25; //Increases speed when apple is eaten by 0.05
         setCurrScore(getCurrScore() + Math.sqrt(2 * getCurrScore() + 1)); //Increases current score by equation
+        System.out.println("Score: " + getCurrScore()); //Prints score to console while we get it to render on screen
+    }
+    
+    //BadEat function when apple is rotten
+    public void badEat(){
+        lenght--;
+        Tail tail= null;
+        handler.getWorld().appleLocation[xCoord][yCoord]=false;
+        handler.getWorld().appleOnBoard=false;
+        switch (direction){
+            case "Left":
+                if( handler.getWorld().body.isEmpty()){
+                    if(this.xCoord!=handler.getWorld().GridWidthHeightPixelCount-1){
+                        tail = new Tail(this.xCoord+1,this.yCoord,handler);
+                    }else{
+                        if(this.yCoord!=0){
+                            tail = new Tail(this.xCoord,this.yCoord-1,handler);
+                        }else{
+                            tail =new Tail(this.xCoord,this.yCoord+1,handler);
+                        }
+                    }
+                }else{
+                    if(handler.getWorld().body.getLast().x!=handler.getWorld().GridWidthHeightPixelCount-1){
+                        tail=new Tail(handler.getWorld().body.getLast().x+1,this.yCoord,handler);
+                    }else{
+                        if(handler.getWorld().body.getLast().y!=0){
+                            tail=new Tail(handler.getWorld().body.getLast().x,this.yCoord-1,handler);
+                        }else{
+                            tail=new Tail(handler.getWorld().body.getLast().x,this.yCoord+1,handler);
+
+                        }
+                    }
+
+                }
+                break;
+            case "Right":
+                if( handler.getWorld().body.isEmpty()){
+                    if(this.xCoord!=0){
+                        tail=new Tail(this.xCoord-1,this.yCoord,handler);
+                    }else{
+                        if(this.yCoord!=0){
+                            tail=new Tail(this.xCoord,this.yCoord-1,handler);
+                        }else{
+                            tail=new Tail(this.xCoord,this.yCoord+1,handler);
+                        }
+                    }
+                }else{
+                    if(handler.getWorld().body.getLast().x!=0){
+                        tail=(new Tail(handler.getWorld().body.getLast().x-1,this.yCoord,handler));
+                    }else{
+                        if(handler.getWorld().body.getLast().y!=0){
+                            tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord-1,handler));
+                        }else{
+                            tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord+1,handler));
+                        }
+                    }
+
+                }
+                break;
+            case "Up":
+                if( handler.getWorld().body.isEmpty()){
+                    if(this.yCoord!=handler.getWorld().GridWidthHeightPixelCount-1){
+                        tail=(new Tail(this.xCoord,this.yCoord+1,handler));
+                    }else{
+                        if(this.xCoord!=0){
+                            tail=(new Tail(this.xCoord-1,this.yCoord,handler));
+                        }else{
+                            tail=(new Tail(this.xCoord+1,this.yCoord,handler));
+                        }
+                    }
+                }else{
+                    if(handler.getWorld().body.getLast().y!=handler.getWorld().GridWidthHeightPixelCount-1){
+                        tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord+1,handler));
+                    }else{
+                        if(handler.getWorld().body.getLast().x!=0){
+                            tail=(new Tail(handler.getWorld().body.getLast().x-1,this.yCoord,handler));
+                        }else{
+                            tail=(new Tail(handler.getWorld().body.getLast().x+1,this.yCoord,handler));
+                        }
+                    }
+
+                }
+                break;
+            case "Down":
+                if( handler.getWorld().body.isEmpty()){
+                    if(this.yCoord!=0){
+                        tail=(new Tail(this.xCoord,this.yCoord-1,handler));
+                    }else{
+                        if(this.xCoord!=0){
+                            tail=(new Tail(this.xCoord-1,this.yCoord,handler));
+                        }else{
+                            tail=(new Tail(this.xCoord+1,this.yCoord,handler));
+                        } System.out.println("Tu biscochito");
+                    }
+                }else{
+                    if(handler.getWorld().body.getLast().y!=0){
+                        tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord-1,handler));
+                    }else{
+                        if(handler.getWorld().body.getLast().x!=0){
+                            tail=(new Tail(handler.getWorld().body.getLast().x-1,this.yCoord,handler));
+                        }else{
+                            tail=(new Tail(handler.getWorld().body.getLast().x+1,this.yCoord,handler));
+                        }
+                    }
+
+                }
+                break;
+        }
+        handler.getWorld().body.remove(tail);
+        handler.getWorld().playerLocation[tail.x][tail.y] = false;
+        speed = speed + 0.25; //Decreases speed when apple is eaten by 0.05
+        setCurrScore(getCurrScore() - Math.sqrt(2 * getCurrScore() + 1)); //Increases current score by equation
         System.out.println("Score: " + getCurrScore()); //Prints score to console while we get it to render on screen
     }
 
@@ -438,6 +572,18 @@ public class Player {
     public State gameState;
     public void reStart() {
     	gameState = new GameState(handler);
+    }
+    
+    //Implements rotten apple
+    public boolean rottenApple() {
+    	
+    	//Apple.setColor(Color.RED);
+    	
+    	if(steps >= 240) {
+    		return true;
+    	}else {
+    		return false;
+    	}
     }
 
     public boolean isJustAte() {
