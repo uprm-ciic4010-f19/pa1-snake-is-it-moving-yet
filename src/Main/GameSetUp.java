@@ -56,6 +56,7 @@ public class GameSetUp implements Runnable {
     private Clip audioClip;
 
     private BufferedImage loading;
+    Font myFont = new Font ("Courier New", 1, 17);
 
     public GameSetUp(String title, int width, int height){
 
@@ -189,7 +190,7 @@ public class GameSetUp implements Runnable {
         g.drawImage(loading ,0,0,width,height,null);
         if(State.getState() != null)
             State.getState().render(g);
-        g.drawString("Score is: " + Math.floor(Player.getCurrScore()), 10, 10); // draws score to screen (floor of it)
+        g.drawString("Score is: " + Math.floor(Player.getCurrScore()), 0, 790); // draws score to screen (floor of it)
 
 
         //End Drawing!
