@@ -1,24 +1,19 @@
 package Game.Entities.Dynamic;
 
-import Main.Handler;
-import MyPackage.RandomColor;
-import Game.Entities.Static.Apple;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+
+import Game.GameStates.GameOver;
 import Game.GameStates.GameState;
 import Game.GameStates.State;
-import Main.GameSetUp;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.lang.reflect.Array;
+import Main.Handler;
 
 
 /**
  * Created by AlexVR on 7/2/2018.
  */
-//Comitting and Pushing through Eclipse
-//lol020202
+
 public class Player {
 
     public int lenght;
@@ -154,6 +149,10 @@ public class Player {
             }else {
             	Eat();
             }
+            
+            
+            
+            
             System.out.println("Steps: " + steps); //prints out steps for debug purposes
             System.out.println("Length: " + lenght); //prints out length for debug purposes
             System.out.println("Speed: " + (speed * -1)); //prints out speed for debug purposes
@@ -229,7 +228,7 @@ public class Player {
                 }if(steps >= 480) {
                 	g.setColor(new Color(255, 0, 0));
                 }
-            	//g.setColor(new Color(128,0,128)); //Changes color of snake to green
+            	//g.setColor(new Color(128,0,128)); //Changes color of snake to purple
                 //g.setColor(RandomColor.randColor); //Changes color of snake to a random one
 
                 if(playeLocation[i][j]||handler.getWorld().appleLocation[i][j]){
@@ -245,7 +244,7 @@ public class Player {
 
     }
 
-    private static double currScore = 0.0;
+    public static double currScore = 0.0;
     public void Eat(){
         lenght++;
         Tail tail= null;
@@ -575,13 +574,16 @@ public class Player {
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
     }
     
+    //public State gameOver = new GameOver(handler);
+    
     public void kill(){
         lenght = 0;
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
                 handler.getWorld().playerLocation[i][j]=true;
-                reStart();	
+                //reStart();
+                //State.setState(gameOver);
             }
         }
     }
@@ -616,6 +618,7 @@ public class Player {
 		return currScore;
 	}
 
+	
 	public void setCurrScore(double currScore) {
 		Player.currScore = currScore;
 	}
