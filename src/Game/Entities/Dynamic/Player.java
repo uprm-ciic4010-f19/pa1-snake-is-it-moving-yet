@@ -25,7 +25,7 @@ public class Player {
 
     public int moveCounter;
 
-    public String direction;//is your first name one?
+    public String direction;
 
     public Player(Handler handler){
         this.handler = handler;
@@ -44,7 +44,9 @@ public class Player {
         moveCounter++;
         if(moveCounter>=5 + speed) {
             checkCollisionAndMove();
-            //appendArrayCheck();
+            /*if(lenght > 2) {
+            	checkDeath();
+            }*/
             isRottenApple = rottenApple();
             moveCounter=0;
         }
@@ -86,18 +88,24 @@ public class Player {
         if(lenght == 0 || currScore < 0) {
         	lenght = 1;
         	currScore = 0;
-        	kill();
+        	State.setState(handler.getGame().gameOver);
+        	//kill();
         }
         
         if(steps >= 600) {
-        	kill();
+        	State.setState(handler.getGame().gameOver);
+        	//kill();
         	steps = 0;
         	lenght = 1;
         	currScore = 0;
         }
-        
-        if(isRottenApple) {
-        	
+        if(justKilled) {
+        	State.setState(handler.getGame().gameOver);
+        	justKilled = false;
+        	//kill();
+        	steps = 0;
+        	lenght = 1;
+        	currScore = 0;
         }
 
     }
@@ -149,9 +157,6 @@ public class Player {
             }else {
             	Eat();
             }
-            
-            
-            
             
             System.out.println("Steps: " + steps); //prints out steps for debug purposes
             System.out.println("Length: " + lenght); //prints out length for debug purposes
@@ -333,7 +338,7 @@ public class Player {
                             tail=(new Tail(this.xCoord-1,this.yCoord,handler));
                         }else{
                             tail=(new Tail(this.xCoord+1,this.yCoord,handler));
-                        } System.out.println("Tu biscochito");
+                        } 
                     }
                 }else{
                     if(handler.getWorld().body.getLast().y!=0){
@@ -445,7 +450,7 @@ public class Player {
                             tail=(new Tail(this.xCoord-1,this.yCoord,handler));
                         }else{
                             tail=(new Tail(this.xCoord+1,this.yCoord,handler));
-                        } System.out.println("Tu biscochito");
+                        } 
                     }
                 }else{
                     if(handler.getWorld().body.getLast().y!=0){
@@ -461,7 +466,8 @@ public class Player {
                 }
                 break;
         }
-        handler.getWorld().body.remove(tail);
+        //handler.getWorld().body.remove(tail); 
+        handler.getWorld().body.remove(handler.getWorld().body.getFirst());
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
         speed = speed + 0.25; //Decreases speed when apple is eaten by 0.25
         setCurrScore(getCurrScore() - Math.sqrt(2 * getCurrScore() + 1)); //Increases current score by equation
@@ -554,7 +560,7 @@ public class Player {
                             tail=(new Tail(this.xCoord-1,this.yCoord,handler));
                         }else{
                             tail=(new Tail(this.xCoord+1,this.yCoord,handler));
-                        } System.out.println("Tu biscochito");
+                        }
                     }
                 }else{
                     if(handler.getWorld().body.getLast().y!=0){
@@ -572,9 +578,25 @@ public class Player {
         }
         handler.getWorld().body.addLast(tail);
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
+        setCurrScore(getCurrScore() + Math.sqrt(2 * getCurrScore() + 1)); //Increases current score by equation
     }
     
-    //public State gameOver = new GameOver(handler);
+    public boolean justKilled = false;
+    public void checkDeath() {
+    	handler.getWorld().playerLocation[xCoord][yCoord]=false;
+        int x = xCoord;
+        int y = yCoord;
+    	for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
+            for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
+
+                if(x == handler.getWorld().body.getFirst().x && y == handler.getWorld().body.getFirst().y) {
+                	justKilled = true;
+                }
+                
+            }
+    	}
+    	handler.getWorld().playerLocation[xCoord][yCoord]=false;
+    }
     
     public void kill(){
         lenght = 0;
@@ -582,8 +604,7 @@ public class Player {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
                 handler.getWorld().playerLocation[i][j]=true;
-                //reStart();
-                //State.setState(gameOver);
+                
             }
         }
     }
