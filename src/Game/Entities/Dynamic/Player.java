@@ -44,9 +44,9 @@ public class Player {
         moveCounter++;
         if(moveCounter>=5 + speed) {
             checkCollisionAndMove();
-            /*if(lenght > 2) {
+            if(lenght > 2) {
             	checkDeath();
-            }*/
+            }
             isRottenApple = rottenApple();
             moveCounter=0;
         }
@@ -86,15 +86,13 @@ public class Player {
         
         //reStarts game if snake become headless or score goes into negative
         if(lenght == 0 || currScore < 0) {
+        	State.setState(handler.getGame().gameOver);
         	lenght = 1;
         	currScore = 0;
-        	State.setState(handler.getGame().gameOver);
-        	//kill();
         }
         
         if(steps >= 600) {
         	State.setState(handler.getGame().gameOver);
-        	//kill();
         	steps = 0;
         	lenght = 1;
         	currScore = 0;
@@ -102,7 +100,6 @@ public class Player {
         if(justKilled) {
         	State.setState(handler.getGame().gameOver);
         	justKilled = false;
-        	//kill();
         	steps = 0;
         	lenght = 1;
         	currScore = 0;
@@ -171,54 +168,6 @@ public class Player {
         }
 
     }
-    
-    //Records coordinates in two different arrays, x and y
-    /*public ArrayList<Integer> arrayCheckXY;
-    public ArrayList<Integer> currentXY;
-    public String arrayCheckOnX[] = new String[] {};
-    public String arrayCheckOnY[] = new String[] {};
-    public int positionOfArray = 0;
-    int sizeOfX = 0;
-    int sizeOfY = 0;
-    int sizeOfXY = 0;
-    int z, f;
-    public void appendArrayCheck() {
-    	 String x = Integer.toString(handler.getWorld().body.getFirst().x);
-    	 String y = Integer.toString(handler.getWorld().body.getFirst().y);
-    	 z = handler.getWorld().body.getFirst().x;
-    	 f = handler.getWorld().body.getFirst().y;
-    	 
-    	 arrayCheckOnX[positionOfArray] = x;
-    	 arrayCheckOnY[positionOfArray] = y;
-    	 positionOfArray++;
-    	 
-    	 sizeOfX = arrayCheckOnX.length;
-    	 sizeOfY = arrayCheckOnY.length;
-    	 
-    	 checkDeath();
-    	 
-    }
-    
-    public void checkDeath() {
-    	String a = Integer.toString(handler.getWorld().body.getFirst().x);
-    	String b = Integer.toString(handler.getWorld().body.getFirst().y);
-    	currentXY.add(z, f);
-    	//int x = Array.getInt(currentXY, 0);
-    	//int y = Array.getInt(currentXY, 1);
-    	String xCompare, yCompare;
-    	for(int i = sizeOfX - lenght; i < sizeOfX - 1; i++) {
-    		xCompare = arrayCheckOnX[i];
-    		if(a == xCompare) {	
-    			for(int j = sizeOfY - lenght; j < sizeOfY - 1; j++) {
-    				yCompare = arrayCheckOnY[j];
-    				if(b == yCompare) {
-    					kill();
-    				}
-    			}
-    		}
-    	}
-    }*/
-    
     
     
     public void render(Graphics g,Boolean[][] playeLocation){
@@ -467,7 +416,7 @@ public class Player {
                 break;
         }
         //handler.getWorld().body.remove(tail); 
-        handler.getWorld().body.remove(handler.getWorld().body.getFirst());
+        handler.getWorld().body.remove(handler.getWorld().body.getFirst()); //removes a piece of body
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
         speed = speed + 0.25; //Decreases speed when apple is eaten by 0.25
         setCurrScore(getCurrScore() - Math.sqrt(2 * getCurrScore() + 1)); //Increases current score by equation
@@ -581,38 +530,20 @@ public class Player {
         setCurrScore(getCurrScore() + Math.sqrt(2 * getCurrScore() + 1)); //Increases current score by equation
     }
     
+    //After length is greater than 2, it starts checking if head collided with body
     public boolean justKilled = false;
     public void checkDeath() {
-    	handler.getWorld().playerLocation[xCoord][yCoord]=false;
-        int x = xCoord;
-        int y = yCoord;
-    	for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
-            for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-
-                if(x == handler.getWorld().body.getFirst().x && y == handler.getWorld().body.getFirst().y) {
+        int x = handler.getWorld().body.getFirst().x;
+        int y = handler.getWorld().body.getFirst().y;
+    	for (int i = 1; i < handler.getWorld().body.size(); i++) {
+    		
+    		
+                if(x == handler.getWorld().body.get(i).x && y == handler.getWorld().body.get(i).y) {
                 	justKilled = true;
                 }
+    		
                 
-            }
     	}
-    	handler.getWorld().playerLocation[xCoord][yCoord]=false;
-    }
-    
-    public void kill(){
-        lenght = 0;
-        for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
-            for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-
-                handler.getWorld().playerLocation[i][j]=true;
-                
-            }
-        }
-    }
-   
-    //reStart function within Player.java
-    public State gameState;
-    public void reStart() {
-    	gameState = new GameState(handler);
     }
     
     //Implements rotten apple
