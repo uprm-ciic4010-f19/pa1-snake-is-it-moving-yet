@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
-import Game.GameStates.GameOver;
-import Game.GameStates.GameState;
 import Game.GameStates.State;
 import Main.Handler;
 
@@ -71,12 +69,12 @@ public class Player {
             }
         }
         
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_P)){
-            //Increases snake's speed
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ADD) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_P)){
+            //Increases snake's speed at the press of "+" or "P"
         	speed--;
         }
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_M)){
-            //Decreases snake's speed
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_SUBTRACT) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_M)){
+            //Decreases snake's speed at the press of "-" or "M"
         	speed++;
         }
         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
@@ -84,10 +82,8 @@ public class Player {
         	debugEat();
         }
         
-        //reStarts game if snake become headless or score goes into negative
-        if(lenght == 0 || currScore < 0) {
-        	State.setState(handler.getGame().gameOver);
-        	lenght = 1;
+        //Score can never go below 0
+        if(currScore < 0) {
         	currScore = 0;
         }
         
@@ -150,14 +146,21 @@ public class Player {
 
         if(handler.getWorld().appleLocation[xCoord][yCoord]){
             if(isRottenApple) {
-            	badEat();
+            	if(lenght == 1) {
+            		State.setState(handler.getGame().gameOver);
+                	lenght = 1;
+                	currScore = 0;
+            	}else {
+            		badEat();
+            	}
+            	
             }else {
             	Eat();
             }
             
-            System.out.println("Steps: " + steps); //prints out steps for debug purposes
-            System.out.println("Length: " + lenght); //prints out length for debug purposes
-            System.out.println("Speed: " + (speed * -1)); //prints out speed for debug purposes
+            //System.out.println("Steps: " + steps); //prints out steps for debug purposes
+           // System.out.println("Length: " + lenght); //prints out length for debug purposes
+           // System.out.println("Speed: " + (speed * -1)); //prints out speed for debug purposes
             steps = 0;
         }
 
@@ -415,7 +418,7 @@ public class Player {
                 }
                 break;
         }
-        //handler.getWorld().body.remove(tail); 
+        handler.getWorld().body.remove(tail); 
         handler.getWorld().body.remove(handler.getWorld().body.getFirst()); //removes a piece of body
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
         speed = speed + 0.25; //Decreases speed when apple is eaten by 0.25
