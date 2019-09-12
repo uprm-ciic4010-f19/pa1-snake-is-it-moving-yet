@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
+import Game.Entities.Static.Apple;
 import Game.GameStates.State;
 import Main.Handler;
 
@@ -45,7 +46,6 @@ public class Player {
             if(lenght > 2) {
             	checkDeath();
             }
-            isRottenApple = rottenApple();
             moveCounter=0;
         }
         if(direction != "Down") {
@@ -145,7 +145,10 @@ public class Player {
 
 
         if(handler.getWorld().appleLocation[xCoord][yCoord]){
-            if(isRottenApple) {
+            if(Apple.isGood()) {
+            	Eat();
+            	
+            }else {
             	if(lenght == 1) {
             		State.setState(handler.getGame().gameOver);
                 	lenght = 1;
@@ -153,9 +156,6 @@ public class Player {
             	}else {
             		badEat();
             	}
-            	
-            }else {
-            	Eat();
             }
             
             //System.out.println("Steps: " + steps); //prints out steps for debug purposes
@@ -546,18 +546,6 @@ public class Player {
                 }
     		
                 
-    	}
-    }
-    
-    //Implements rotten apple
-    public boolean rottenApple() {
-    	
-    	//apple.setColor(Color.RED);
-    	
-    	if(steps >= 240) {
-    		return true;
-    	}else {
-    		return false;
     	}
     }
 
